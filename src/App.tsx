@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {  Routes, Route } from 'react-router-dom';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,6 @@ import Cart from './components/Cart';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
         <Navbar />
         <ToastContainer />
 		<div className="container mt-4">
@@ -34,7 +33,6 @@ function App() {
 				</a>
 			</div>
 		</footer>
-      </BrowserRouter>
     </div>
   );
 }
