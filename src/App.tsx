@@ -10,9 +10,10 @@ import Home from './components/Home'; // Fix typo in the import
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Cart from './components/Cart';
-
+import {AuthProvider} from './AuthContext/index'
 function App() {
   return (
+	<AuthProvider>
     <div className="App">
         <Navbar />
         <ToastContainer />
@@ -34,6 +35,7 @@ function App() {
 			</div>
 		</footer>
     </div>
+	</AuthProvider>
   );
 }
 

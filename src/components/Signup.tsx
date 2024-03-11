@@ -29,7 +29,7 @@ const Signup = () => {
       const token = response.data.token;
 
       // Store the token in local storage for future authorization
-      localStorage.setItem('token', token);
+      localStorage.setItem('jwtToken', token);
 		history('/');
       // Redirect to home page or dashboard
     } catch (error) {

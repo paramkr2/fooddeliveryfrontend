@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import {AuthContext} from '../AuthContext' 
 const Login = () => {
+	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  
   const history = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,9 +19,9 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:8000/auth/login', payload);
       const token = response.data.token;
-
       // Store the token in local storage for future authorization
-      localStorage.setItem('token', token);
+      localStorage.setItem('jwtToken', token);
+	  setIsLoggedIn(true)
       history('/');
       // Redirect to home page or dashboard
     } catch (error) {
