@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState , useContext } from 'react';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom'
-
+import {AuthContext} from '../AuthContext'
 const Signup = () => {
 	const history = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-
+	const { isLoggedIn, authAction  } = useContext(AuthContext);
   const handleSubmit = async (event) => {
     event.preventDefault(); //prevents default behaviour of form submit which is reload page
 	
@@ -30,6 +30,7 @@ const Signup = () => {
 
       // Store the token in local storage for future authorization
       localStorage.setItem('jwtToken', token);
+	  authAction('LOGIN')
 		history('/');
       // Redirect to home page or dashboard
     } catch (error) {

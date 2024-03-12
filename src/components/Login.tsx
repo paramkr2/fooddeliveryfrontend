@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from '../AuthContext' 
 const Login = () => {
-	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+	const { isLoggedIn, authAction  } = useContext(AuthContext);
   
   const history = useNavigate();
   const [username, setUsername] = useState('');
@@ -21,7 +21,7 @@ const Login = () => {
       const token = response.data.token;
       // Store the token in local storage for future authorization
       localStorage.setItem('jwtToken', token);
-	  setIsLoggedIn(true)
+	  authAction('LOGIN');
       history('/');
       // Redirect to home page or dashboard
     } catch (error) {

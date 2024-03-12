@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Navbar';
 import { AuthContext } from '../AuthContext';
 
 const CustomNavbar = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, authAction  } = useContext(AuthContext);
 
   useEffect(() => {
     // Check for the token in local storage when the component mounts
@@ -14,14 +14,14 @@ const CustomNavbar = () => {
 
     if (token) {
       // If a token is found, set the user as logged in
-      setIsLoggedIn(true);
+      authAction('LOGIN');
     }
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const handleLogout = () => {
     // Clear the stored token and update the authentication status
     localStorage.removeItem('jwtToken');
-    setIsLoggedIn(false);
+    authAction('LOGOUT')
   };
 
   return (
