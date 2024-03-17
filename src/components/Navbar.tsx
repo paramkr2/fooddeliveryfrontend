@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Navbar';
 import { AuthContext } from '../AuthContext';
 
+
 const CustomNavbar = () => {
   const { isLoggedIn, authAction  } = useContext(AuthContext);
 
@@ -36,7 +37,7 @@ const CustomNavbar = () => {
               Home
             </Nav.Link>
             {isLoggedIn ? (
-              <Nav.Link className="btn btn-link" onClick={handleLogout}>
+              <Nav.Link className="btn btn-link" onClick={handleLogout} data-testid="logout-link">
                 Logout
               </Nav.Link>
             ) : (

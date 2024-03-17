@@ -24,5 +24,6 @@
   "references": [{ "path": "./tsconfig.node.json" }],
   "jest": {
     "preset": "ts-jest"
-  }
+  },
+  "types": ["node", "jest"],
 }
