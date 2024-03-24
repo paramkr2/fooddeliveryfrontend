@@ -2,7 +2,7 @@ import React, { useState , useContext } from 'react';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom'
-import {AuthContext} from '../AuthContext'
+import {AuthContext} from '../context/AuthContext' 
 const Signup = () => {
 	const history = useNavigate();
   const [username, setUsername] = useState('');
@@ -25,7 +25,7 @@ const Signup = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/signup', payload);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, payload);
       const token = response.data.token;
 
       // Store the token in local storage for future authorization

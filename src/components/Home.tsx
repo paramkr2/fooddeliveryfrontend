@@ -19,13 +19,13 @@ const Home = () => {
           };
 
       const response = await axios.get(
-        'http://localhost:8000/nearbyRestaurants',
+       `${import.meta.env.VITE_API_URL}/nearbyRestaurants`,
         {
           headers,
           params: {
             location: {
               type: 'Point',
-              coordinates: [28.653605, 77.211281],
+              coordinates:  [-122.4195, 37.7748],
             } as any,
           },
         }

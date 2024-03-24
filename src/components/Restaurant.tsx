@@ -1,41 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const RestaurantComponent = ({ match }) => {
-  const [restaurantData, setRestaurantData] = useState(null);
-  const restaurantId = match.params.id;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/itemsRestaurants`,{
-			params:{restaurantId}
-		});
-        setRestaurantData(response.data);
-      } catch (error) {
-        console.error('Error fetching restaurant data:', error);
-      }
-    };
-
-    fetchData();
-  }, [restaurantId]);
+import { useParams } from 'react-router-dom';
+import Dish from './Dish';
+import { Row, Col } from 'react-bootstrap';
+const RestaurantComponent = () => {
+	
+  const { id } = useParams();
+  const [dishes, setDishes] = useState([]);
+	
+	const fetchData = async () => {
+			  try {
+				const response = await axios.get(`http://localhost:8000/itemsRestaurants`, {
+				  params: { restaurantId: id }
+				});
+				console.log(response)
+				setDishes(response.data);
+			  } catch (error) {
+				console.error('Error fetching restaurant data:', error);
+			  }
+			};
+	  
+	 useEffect(() => {
+		fetchData();
+	  }, [id]);
 
   return (
     <div>
-      {restaurantData ? (
-        <div>
-          <h1>{restaurantData.name}</h1>
-          <p>{restaurantData.description}</p>
-          <div className="menu-items">
-            {restaurantData.menuItems.map((item) => (
-              <CardComponent key={item.id} menuItem={item} />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <p>Loading restaurant data...</p>
-      )}
+  {dishes ? (
+    <div className="menu-items">
+      <Row>
+        {dishes.map((item) => (
+          <Col key={item._id} md={4}>
+            <Dish item={item} />
+          </Col>
+        ))}
+      </Row>
     </div>
+  ) : (
+    <p>Loading restaurant data...</p>
+  )}
+</div>
   );
 };
 

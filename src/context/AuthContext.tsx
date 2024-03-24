@@ -11,7 +11,9 @@ const initialState = {
   isLoggedIn: false,
 };
 
-const authReducer = (state, action) => {
+type AuthActionType = 'LOGIN' | 'LOGOUT'; // Define action types
+
+const authReducer = (state: typeof initialState, action: { type: AuthActionType }) => {
   switch (action.type) {
     case 'LOGIN':
       return { ...state, isLoggedIn: true };
@@ -25,7 +27,7 @@ const authReducer = (state, action) => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const authAction = (type: string) => {
+  const authAction = (type: AuthActionType) => {
     dispatch({ type });
   };
 

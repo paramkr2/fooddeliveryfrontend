@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Navbar';
-import { AuthContext } from '../AuthContext';
+import {AuthContext} from '../context/AuthContext' 
 
 
 const CustomNavbar = () => {
@@ -53,11 +53,6 @@ const CustomNavbar = () => {
             <Nav.Link as={Link} to="/cart">
               Cart
             </Nav.Link>
-            <Nav.Item>
-              <Nav.Link as={Link} to="/restaurant">
-                Restaurant
-              </Nav.Link>
-            </Nav.Item>
           </Container>
         </Nav>
       </div>

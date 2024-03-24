@@ -2,7 +2,7 @@ import React, { useState,useContext } from 'react';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import {AuthContext} from '../AuthContext' 
+import {AuthContext} from '../context/AuthContext' 
 const Login = () => {
 	const { isLoggedIn, authAction  } = useContext(AuthContext);
   
@@ -18,7 +18,7 @@ const Login = () => {
       password,
     };
     try {
-      const response = await axios.post('http://localhost:8000/auth/login', payload);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, payload);
       const token = response.data.token;
       // Store the token in local storage for future authorization
       localStorage.setItem('jwtToken', token);
