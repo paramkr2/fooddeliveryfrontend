@@ -2,20 +2,34 @@ import React, { useState, useContext, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Button, Card } from 'react-bootstrap';
 
-const Dish = ({ item }) => {
+const Dish = ({ item , restaurantId}) => {
   const { cart, dispatch } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    if (cart[item._id]) {
-      setQuantity(cart[item._id].quantity);
+	//dispatch({ type: 'CLEAR_CART'});
+	console.log(cart)
+    if (cart && cart.items && cart.items[item._id]) {
+
+      setQuantity(cart.items[item._id].quantity);
     }
   }, []);
 
   const handleAddToCart = () => {
+	if( cart.restaurantId !== null && cart.restaurantId !== String(restaurantId) ) {
+		const confirmClear = window.confirm('Adding this item will clear your current cart. Do you want to proceed?');
+		if (confirmClear) {
+		  // Clear the cart and then add the item
+		  dispatch({ type: 'CLEAR_CART' });
+		} else {
+		  // User chose not to clear the cart, do nothing
+		  return;
+		}
+	}
     dispatch({
       type: 'ADD_TO_CART',
       payload: {
+		restaurantId,
         _id: item._id,
         quantity: quantity,
         name: item.name,
@@ -29,7 +43,7 @@ const Dish = ({ item }) => {
   }
 
   const handleRemoveFromCart = () => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: { _id: item._id } });
+    dispatch({ type: 'REMOVE_FROM_CART', payload: {  _id: item._id } });
   };
 
   const handleIncreaseQuantity = () => {
@@ -48,25 +62,26 @@ const Dish = ({ item }) => {
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>Price: ${item.price}</Card.Text>
         <div className="quantity-controls">
-          <Button variant="secondary" onClick={handleDecreaseQuantity}>-</Button>
-          <span className="quantity">{quantity}</span>
-          <Button variant="secondary" onClick={handleIncreaseQuantity}>+</Button>
+			<Button variant="secondary" size="sm" onClick={handleDecreaseQuantity}>-</Button>
+			<span className="quantity smaller">{quantity}</span>
+			<Button variant="secondary" size="sm" onClick={handleIncreaseQuantity}>+</Button>
+
         </div>
         <Button
-		  onClick={cart[item._id] ?
-			(cart[item._id].quantity !== quantity ? handleUpdateCart : handleRemoveFromCart) :
+		  onClick={cart.items && (cart.items[item._id] ?
+			(cart.items[item._id].quantity !== quantity ? handleUpdateCart : handleRemoveFromCart) :
 			handleAddToCart
-		  }
-		  variant={cart[item._id] ?
-			(cart[item._id].quantity !== quantity ? 'warning' : 'info') :
+		  )}
+		  variant={ cart.items && ( cart.items[item._id] ?
+			(cart.items[item._id].quantity !== quantity ? 'warning' : 'info') :
 			'success'
-		  }
+		  )}
 		  disabled={quantity === 0}
 		>
-		  {cart[item._id] ?
-			(cart[item._id].quantity !== quantity ? 'Update' : 'Remove') :
+		  {cart.items && ( cart.items[item._id] ?
+			(cart.items[item._id].quantity !== quantity ? 'Update' : 'Remove') :
 			'Add'
-		  }
+		  )}
 		</Button>
 
       </Card.Body>
@@ -75,4 +90,4 @@ const Dish = ({ item }) => {
 };
 
 export default Dish;
-``
+

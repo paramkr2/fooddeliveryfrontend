@@ -12,11 +12,11 @@ const Cart = () => {
 		<div>
 		  <h2>Cart</h2>
 		  <div>
-			  {Object.keys(cart).map((itemIndex) => (
+			  {Object.keys(cart.items).map((itemIndex) => (
 				<div key={itemIndex}>
 				  <h3>Item Id {itemIndex}</h3>
-				  <p>Name: {cart[itemIndex].name}</p>
-				  <p>Price: ${cart[itemIndex].price}</p>
+				  <p>Name: {cart.items[itemIndex].name}</p>
+				  <p>Price: ${cart.items[itemIndex].price}</p>
 				  {/* Add additional item details here */}
 				</div>
 			  ))}

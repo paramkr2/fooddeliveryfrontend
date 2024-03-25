@@ -31,7 +31,7 @@ const RestaurantComponent = () => {
       <Row>
         {dishes.map((item) => (
           <Col key={item._id} md={4}>
-            <Dish item={item} />
+            <Dish item={item} restaurantId={id}/>
           </Col>
         ))}
       </Row>
