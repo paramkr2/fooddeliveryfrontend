@@ -1,42 +1,78 @@
-import React, { useState , useContext } from 'react';
-import {CartContext,cartReducer } from '../context/CartContext'
-import axios from 'axios'
-
+import React, { useState, useContext, useEffect } from 'react';
+import { CartContext } from '../context/CartContext';
+import { Button, Card } from 'react-bootstrap';
 
 const Dish = ({ item }) => {
-  const [addedToCart, setAddedToCart] = useState(false);
-	const { items, dispatch } = useContext(CartContext); // Destructure dispatch from CartContext
+  const { cart, dispatch } = useContext(CartContext);
+  const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = async () => {
-    try {
-		
-		let token = localStorage.getItem('jwtToken');
-		let headers = { 'Authorization':token }
-        let payload = { itemId:item._id,quantity:0,forceAdd:0 } 
-		const response = await axios.post(`${import.meta.env.VITE_API_URL}/cart/add`, payload , {headers} );
-        console.log(response.data);
-		dispatch( { type: 'ADD_TO_CART', payload } );
-		setAddedToCart(true);
-    } catch (error) {
-      console.error('Error adding to cart:', error);
+  useEffect(() => {
+    if (cart[item._id]) {
+      setQuantity(cart[item._id].quantity);
+    }
+  }, []);
+
+  const handleAddToCart = () => {
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: {
+        _id: item._id,
+        quantity: quantity,
+        name: item.name,
+        price: item.price
+      }
+    });
+  };
+  
+  const handleUpdateCart= () => {
+	handleAddToCart();
+  }
+
+  const handleRemoveFromCart = () => {
+    dispatch({ type: 'REMOVE_FROM_CART', payload: { _id: item._id } });
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
     }
   };
 
-  const handleRemoveFromCart = () => {
-    // Placeholder logic for removing from cart
-    // Here you can perform any logic to remove the item from the cart
-    setAddedToCart(false);
-  };
-
   return (
-    <div className="dish">
-      <h3>{item.name}</h3>
-      <p>Price: ${item.price}</p>
-      <button onClick={addedToCart ? handleRemoveFromCart : handleAddToCart} style={{ color: addedToCart ? 'red' : 'black' }}>
-        {addedToCart ? 'Added' : 'Add to Cart'}
-      </button>
-    </div>
+    <Card className="dish">
+      <Card.Body>
+        <Card.Title>{item.name}</Card.Title>
+        <Card.Text>Price: ${item.price}</Card.Text>
+        <div className="quantity-controls">
+          <Button variant="secondary" onClick={handleDecreaseQuantity}>-</Button>
+          <span className="quantity">{quantity}</span>
+          <Button variant="secondary" onClick={handleIncreaseQuantity}>+</Button>
+        </div>
+        <Button
+		  onClick={cart[item._id] ?
+			(cart[item._id].quantity !== quantity ? handleUpdateCart : handleRemoveFromCart) :
+			handleAddToCart
+		  }
+		  variant={cart[item._id] ?
+			(cart[item._id].quantity !== quantity ? 'warning' : 'info') :
+			'success'
+		  }
+		  disabled={quantity === 0}
+		>
+		  {cart[item._id] ?
+			(cart[item._id].quantity !== quantity ? 'Update' : 'Remove') :
+			'Add'
+		  }
+		</Button>
+
+      </Card.Body>
+    </Card>
   );
 };
 
 export default Dish;
+``
