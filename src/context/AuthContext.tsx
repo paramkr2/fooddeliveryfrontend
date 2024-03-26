@@ -1,38 +1,36 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer , useState } from 'react';
 
-interface AuthContextProps {
-  isLoggedIn: boolean;
-  authAction: (type: string) => void;
-}
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+export const AuthContext = createContext();
 
 const initialState = {
   isLoggedIn: false,
+  user:{}
 };
 
-type AuthActionType = 'LOGIN' | 'LOGOUT'; // Define action types
-
-const authReducer = (state: typeof initialState, action: { type: AuthActionType }) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
       return { ...state, isLoggedIn: true };
     case 'LOGOUT':
       return { ...state, isLoggedIn: false };
+	 case 'SET_USER':
+		console.log('set user' , action.payload )
+		const newState = {...state,user:{ ...action.payload }}
+		console.log(newState)
+		return newState;
     default:
       return state;
   }
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
-  const authAction = (type: AuthActionType) => {
-    dispatch({ type });
-  };
+	
 
   return (
-    <AuthContext.Provider value={{ ...state, authAction }}>
+    <AuthContext.Provider value={{ ...state, dispatch }}>
       {children}
     </AuthContext.Provider>
   );

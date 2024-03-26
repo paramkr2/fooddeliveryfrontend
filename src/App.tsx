@@ -10,6 +10,7 @@ import Home from './components/Home'; // Fix typo in the import
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Cart from './components/Cart';
+import Admin from './components/Admin'
 import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
 function App() {
@@ -26,6 +27,7 @@ function App() {
 				  <Route exact path="/signup" element={<Signup />} />
 				  <Route exact path="/cart" element={<Cart />} />
 				  <Route exact path="/restaurant/:id" element={<Restaurant />} />
+				  <Route exact path="/admin" element={<Admin/>} /> 
 				</Routes>
 			</div>
 			<footer className="text-center text-lg-start bg-light text-muted mt-4">
