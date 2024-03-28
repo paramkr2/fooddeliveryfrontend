@@ -19,7 +19,7 @@ const CardComponent = ({ menuItem }) => {
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Body>
-        <Card.Title>{menuItem.name}</Card.Title>
+		<Card.Title>{menuItem.name}</Card.Title>
         <Card.Text>{menuItem.description}</Card.Text>
         <Card.Text>Price: ${menuItem.price}</Card.Text>
         <div className="quantity-container">

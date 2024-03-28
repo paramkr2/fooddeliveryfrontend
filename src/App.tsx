@@ -13,8 +13,16 @@ import Cart from './components/Cart';
 import Admin from './components/Admin'
 import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+
+
 function App() {
+	const stripePromise = loadStripe('pk_test_51OySTLSAWAYegyhdYh1zHvF2zFdEO3v0K3HANelcW216KLjdVfF9UzRkE9ovRb1inqCegG6FWK3cLGe0krOuzf6C00kAcHI8kY');
+
   return (
+	<Elements stripe={stripePromise}>
 	<AuthProvider>
 		<CartProvider>
 		<div className="App">
@@ -25,8 +33,11 @@ function App() {
 				  <Route exact path="/" element={<Home />} />
 				  <Route exact path="/login" element={<Login />} />
 				  <Route exact path="/signup" element={<Signup />} />
-				  <Route exact path="/cart" element={<Cart />} />
+				  
+					<Route exact path="/cart" element={<Cart />} />
+				 
 				  <Route exact path="/restaurant/:id" element={<Restaurant />} />
+					
 				  <Route exact path="/admin" element={<Admin/>} /> 
 				</Routes>
 			</div>
@@ -41,6 +52,7 @@ function App() {
 		</div>
 		</CartProvider>
 	</AuthProvider>
+	 </Elements>
   );
 }
 

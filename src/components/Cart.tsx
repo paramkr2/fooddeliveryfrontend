@@ -1,10 +1,11 @@
-import React , {useContext,useEffect} from 'react';
+import React , {useContext,useEffect,useState} from 'react';
 import {CartContext} from '../context/CartContext'
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import Dish from './Dish'
+import PaymentForm from './PaymentComponents/PaymentForm'
 
 const Cart = () => {
-	const {cart,dispatch} = useContext(CartContext);
+	  const { cart, dispatch } = useContext(CartContext);
 
 	useEffect(() => {
 	  console.log('Items changed:', cart);
@@ -23,6 +24,7 @@ const Cart = () => {
 			 </Row>  
 			</div>
 			
+			<PaymentForm/>
 			{ /* Add Show total amount and confirm order and pay button */}
 
 

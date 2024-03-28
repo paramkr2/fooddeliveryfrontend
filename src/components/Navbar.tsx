@@ -18,16 +18,25 @@ const CustomNavbar = () => {
 	  }, [cart.items]);
   
 	useEffect(() => {
-    // Check for the token in local storage when the component mounts
-    const token = localStorage.getItem('jwtToken');
-		if (token) {
-		  dispatch({type:'LOGIN'})
-		  const decodedToken =  jwtDecode(token);
-		  console.log('before set_user call',decodedToken)
-		  dispatch({type:'SET_USER' ,payload :decodedToken });  
-		}
-	  }, []); // Empty dependency array ensures this effect runs only once on mount
+        // Check for the token in local storage when the component mounts
+        const token = localStorage.getItem('jwtToken');
 
+        if (token) {
+            // Decode the token to verify its validity
+            const decodedToken = jwtDecode(token);
+            const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+            // Check if the token is expired
+            if (decodedToken.exp < currentTime) {
+                // Token is expired, dispatch logout action
+                dispatch({ type: 'LOGOUT' });
+            } else {
+                // Token is valid, dispatch login action and set user data
+                dispatch({ type: 'LOGIN' });
+                dispatch({ type: 'SET_USER', payload: decodedToken });
+            }
+        }
+    }, [dispatch]); 
+	
 	const handleLogout = () => {
     // Clear the stored token and update the authentication status
     localStorage.removeItem('jwtToken');
@@ -75,7 +84,7 @@ const CustomNavbar = () => {
                 Signup
               </Nav.Link>
             )}
-			{ user.restaurantOwner && 
+			{ isLoggedIn && user.restaurantOwner && 
 				<Nav.Link as={Link} to={`/admin`}>
 					Admin
 				</Nav.Link>

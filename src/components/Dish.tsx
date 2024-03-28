@@ -4,9 +4,9 @@ import { Button, Card } from 'react-bootstrap';
 
 
 const Dish = ({ item , restaurantId}) => {
-  const { cart, dispatch } = useContext(CartContext);
-  const [quantity, setQuantity] = useState(1);
-
+	const { cart, dispatch } = useContext(CartContext);
+	const [quantity, setQuantity] = useState(1);
+	
   useEffect(() => {
 	//dispatch({ type: 'CLEAR_CART'});
 	console.log(cart)
@@ -60,6 +60,7 @@ const Dish = ({ item , restaurantId}) => {
   return (
     <Card className="dish">
       <Card.Body>
+		{  item.imagePath && <Card.Img variant="top" src={`${import.meta.env.VITE_API_URL}/${item.imagePath}`} />}
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>Price: ${item.price}</Card.Text>
         <div className="quantity-controls">

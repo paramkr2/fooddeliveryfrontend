@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Button, Card } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
 
-const Dish = ({ item }) => {
+
+const DishAdmin = ({ item }) => {
 	  const [name, setName] = useState(item.name);
 	  const [price, setPrice] = useState(item.price);
 	  const [description, setDescription] = useState(item.description);
@@ -42,13 +42,14 @@ const Dish = ({ item }) => {
   return (
     <Card className="dish">
       <Card.Body>
+		{ item.imagePath && <Card.Img variant="top" src={`${import.meta.env.VITE_API_URL}/${item.imagePath}`} />}
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>Price: ${item.price}</Card.Text>
-		<Card.Text>Price: ${item.description}</Card.Text>
+		<Card.Text>{item.description}</Card.Text>
       </Card.Body>
     </Card>
   );
 };
 
-export default Dish;
+export default DishAdmin;
 

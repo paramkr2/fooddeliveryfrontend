@@ -25,7 +25,7 @@ const Home = () => {
           params: {
             location: {
               type: 'Point',
-              coordinates:  [-122.4195, 37.7748],
+              coordinates:  [0,0] //[-122.4195, 37.7748],
             } as any,
           },
         }

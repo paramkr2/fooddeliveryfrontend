@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-
-const AddItemModal = ({ show,setShow }) => {
+import { toast } from 'react-toastify';
+const AddItemModal = ({ show, setShow, setItems }) => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    description: ''
+    description: '',
+    image: null // New state for image file
   });
 
   const handleInputChange = (e) => {
@@ -17,26 +18,39 @@ const AddItemModal = ({ show,setShow }) => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    setFormData(prevState => ({
+      ...prevState,
+      image: e.target.files[0] // Set the selected image file
+    }));
+  };
+
   const handleClose = () => {
-    setFormData({ name: '', price: '', description: '' }); // Reset form data when closing
+    setFormData({ name: '', price: '', description: '', image: null }); // Reset form data when closing
     setShow(false); // Close the modal
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let token = localStorage.getItem('jwtToken');
-      let headers = { 'Authorization': token };
-      let res = await axios.post('http://localhost:8000/admin/create', formData, { headers });
+      const token = localStorage.getItem('jwtToken');
+      const headers = { 'Authorization': token };
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('image', formData.image); // Append image file to FormData
+      const res = await axios.post('http://localhost:8000/admin/create', formDataToSend, { headers });
       handleClose(); // Close the modal after submission
-      resList(); // Assuming resList is defined somewhere
+      setItems(prevItems => [ res.data,...prevItems]);
+	  toast.success('Item Successfully Added')
     } catch (error) {
       console.log(error);
+	  toast.error('Error while Adding Item')
     }
   };
 
   return (
-	 
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Add New Item</Modal.Title>
@@ -55,6 +69,12 @@ const AddItemModal = ({ show,setShow }) => {
             <Form.Label>Description</Form.Label>
             <Form.Control as="textarea" rows={3} name="description" value={formData.description} onChange={handleInputChange} />
           </Form.Group>
+          
+		  <Form.Group controlId="image">
+			  <Form.Label>Image</Form.Label>
+			  <Form.Control type="file" name="image" onChange={handleImageChange} />
+			</Form.Group>
+
         </Form>
       </Modal.Body>
       <Modal.Footer>
