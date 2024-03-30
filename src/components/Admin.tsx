@@ -4,6 +4,10 @@ import AddItemModal from './AdminComponents/AddItemModal';
 import UpdateItemModal from './AdminComponents/UpdateItemModal';
 import axios from 'axios';
 import DishAdmin from './AdminComponents/DishAdmin';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+
 
 const Admin = () => {
   const [items, setItems] = useState([]);

@@ -1,55 +1,31 @@
 import styled from "styled-components";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-import React, { useState } from "react";
-import { Spinner } from "react-bootstrap"; // Import Spinner component from React Bootstrap
+import React, { useState, useEffect} from "react";
+import {useNavigate} from 'react-router-dom'
+import { Modal, Button, Spinner } from 'react-bootstrap';
 
-const CARD_OPTIONS = {
-  iconStyle: "solid",
-  style: {
-    base: {
-      iconColor: "#c4f0ff",
-      color: "#cfffde",
-      fontWeight: 500,
-      fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
-      fontSize: "16px",
-      fontSmoothing: "antialiased",
-      ":-webkit-autofill": { color: "#fce883" },
-      "::placeholder": { color: "#87bbfd" },
-    },
-    invalid: {
-      iconColor: "#fa0000",
-      color: "#ffc7ee",
-    },
-  },
-};
-
-const PaymentForm = () => {
-	  const [success, setSuccess] = useState(false);
-	  const stripe = useStripe();
-	  const elements = useElements();
-		const [loading, setLoading] = useState(false);
+const PaymentForm = ({show,setShow}) => {
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
 
   const handleSubmit = async (e) => {
-		const amountInDollars = 4564;
-		const finalTotal = amountInDollars * 100;
-		e.preventDefault();
-		
-		const { error, paymentMethod } = await stripe.createPaymentMethod({
-		  type: "card",
-		  card: elements.getElement(CardElement),
-		});
-
-		if (!error) {
-		  try {
-			setLoading(true);
-			console.log('trying payment');
-			const { id } = paymentMethod;
-			const response = await axios.post("http://localhost:8000/payment/create", {
-			  amount: finalTotal
-			  currency:'USD',
-			  description: 'Software development services',
-			  shipping: {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const { error } = await stripe.confirmPayment( {
+	  elements,
+       redirect: 'if_required',
+         confirmParams: {
+            // Make sure to change this to your payment completion page
+            return_url: `http://localhost:5173/cart`,
+			shipping: {
 				name: 'Jenny Rosen',
 				address: {
 				  line1: '510 Townsend St',
@@ -58,75 +34,52 @@ const PaymentForm = () => {
 				  state: 'CA',
 				  country: 'US',
 				},
-			  }, // required for indian regualtion warning
-			});
-			console.log(response.data);
-			const  paymentIntent  = response.data;
-			  if (paymentIntent.status === 'requires_confirmation') {
-				// Confirm the Payment Intent on the client side using the client secret
-				//const result = await stripe.confirmCardPayment(paymentIntent.client_secret);
-				const result = await stripe
-				  .confirmCardPayment(paymentIntent.client_secret, {
-					payment_method: {
-					  card: elements.getElement(CardElement),
-					  billing_details: {
-						name: 'Jenny Rosen',
-						address: {
-						  line1: '1 Main street',
-						  city: 'San Francisco',
-						  postal_code: '90210',
-						  state: 'CA',
-						  country: 'US',
-						},
-					  },
-					  
-					},
-				  });
-				if (result.error) {
-				  console.error(result.error.message);
-				  return;
-				}
+			  },
+		 },
+      });
 
-				// Handle the result of confirmation
-				if (result.paymentIntent.status === 'succeeded') {
-				  console.log('Payment successful!');
-				  setSuccess(true)
-				} else {
-				  console.log('Payment failed.');
-				}
-			}
-		  } catch (error) {
-			console.log("Error", error);
-		  } finally{
-			setLoading(false);
-		  }
-		} else {
-		  console.log(error.message);
-		}
-	  };
+      if (error) {
+        console.error("Payment confirmation error:", error.message);
+        return;
+      }
+
+      setSuccess(true); // Update state to indicate successful payment
+	   setTimeout(() => {
+        navigate(`/order/recent`); // Navigate to the order details page after a delay
+      }, 1000);
+    } catch (error) {
+      console.error("Error confirming payment:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      {!success ? (
-        <form onSubmit={handleSubmit}>
-          <fieldset className="FormGroup">
-            <div className="FormRow">
-              <PaymentElement/>
-            </div>
-          </fieldset>
-          <button type="submit" disabled={loading} onClick={handleSubmit}> {/* Disable button when loading */}
-            {loading ? <Spinner /> : "Pay"}
-          </button>
-          <h2>$10</h2>
-        </form>
-      ) : (
-        <div>
-          <h2>Payment successful!</h2>
-        </div>
-      )}
-    </div>
+    <Modal show={show} onHide={()=>setShow(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title>Payment Form</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {!success ? (
+          <form onSubmit={handleSubmit}>
+            <fieldset className="FormGroup">
+              <div className="FormRow">
+                <PaymentElement />
+              </div>
+            </fieldset>
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? <Spinner animation="border" size="sm" /> : 'Pay'}
+            </Button>
+            <h2>$10</h2>
+          </form>
+        ) : (
+          <div>
+            <h2>Payment successful!</h2>
+          </div>
+        )}
+      </Modal.Body>
+    </Modal>
   );
 };
 
 export default PaymentForm;
-
