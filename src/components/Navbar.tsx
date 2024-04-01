@@ -89,7 +89,16 @@ const CustomNavbar = () => {
 					Admin
 				</Nav.Link>
 			}
-			
+			{ isLoggedIn  && 
+				<Nav.Link as={Link} to={`/orderlist/1`}>
+					History
+				</Nav.Link>
+			}
+			{ isLoggedIn  && 
+				<Nav.Link as={Link} to={`/location`}>
+					Location
+				</Nav.Link>
+			}
             <Nav.Link as={Link} to="/cart">
 				<div className="cart-icon" style={cartIconStyle} >
 				<div className="cart-icon-content">Cart:{cartCount}</div>

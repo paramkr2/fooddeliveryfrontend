@@ -4,9 +4,7 @@ import AddItemModal from './AdminComponents/AddItemModal';
 import UpdateItemModal from './AdminComponents/UpdateItemModal';
 import axios from 'axios';
 import DishAdmin from './AdminComponents/DishAdmin';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-
+import {useNavigate} from 'react-router-dom';
 
 
 const Admin = () => {
@@ -14,7 +12,8 @@ const Admin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null); // State to store the selected item
-
+	const navigate = useNavigate()
+	
   const handleEdit = (item) => {
 	console.log(`Edit item:${item.name}`)
     setSelectedItem(item);
@@ -53,6 +52,7 @@ const Admin = () => {
   return (
     <div>
       <Button variant="primary" onClick={() => setShowAddModal(true)}>Add Item</Button>
+		<Button variant="primary" onClick={() => navigate('/admin/orders')}>Orders</Button>
 
       <AddItemModal show={showAddModal} setShow={setShowAddModal} setItems={setItems} />
       

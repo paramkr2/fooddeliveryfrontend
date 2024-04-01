@@ -12,6 +12,9 @@ import Signup from './components/Signup';
 import Cart from './components/Cart';
 import Admin from './components/Admin'
 import OrderStatus from './components/Order/OrderStatus'
+import OrderList from './components/Order/OrderList'
+import OrderHistory from './components/AdminComponents/Orders'
+import MapPage from './components/Map/MapPage'
 
 import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
@@ -37,6 +40,9 @@ function App() {
 				  <Route exact path="/restaurant/:id" element={<Restaurant />} />
 				  <Route exact path="/admin" element={<Admin/>} /> 
 					<Route exact path="/order/:orderId" element={<OrderStatus/>} />
+					<Route exact path="/orderlist/:page" element={<OrderList/>} />
+					<Route exact path="/admin/orders" element={<OrderHistory/>} />
+					<Route exact path="/location" element={<MapPage/>} />
 				</Routes>
 			</div>
 			<footer className="text-center text-lg-start bg-light text-muted mt-4">
