@@ -6,60 +6,70 @@ import 'leaflet/dist/leaflet.css';
 import {_} from 'lodash'
 
 const DeliveryMap = ({userLocation,restaurantLocation,driverLocation}) => {
-	 const [route, setRoute] = useState(null);
-	const[route2,setRoute2] = useState(null)
-	  useEffect(() => {
-		if (driverLocation && restaurantLocation) {
-			
-		  fetchRoute(driverLocation, restaurantLocation);
-		}
-	  }, [driverLocation, restaurantLocation]);
+	const [route, setRoute] = useState(null);
+	const [simulatedDriverLocation,setSimulatedDriverLocation] = useState(driverLocation)
 	
-	const map = useMap();
-	useEffect(() => {
-		if (route) {
-		  // Calculate the center of the route coordinates
-		  const center = route.coordinates.reduce((acc, curr) => {
-			return [acc[0] + curr[0], acc[1] + curr[1]];
-		  }, [0, 0]).map(coord => coord / route.coordinates.length);
-
-		  // Fly to the center of the route coordinates
-		  map.flyTo(center, 13); // Adjust zoom level as needed
+	const findFirstUnequalCoordinate = (cords, arr) => {
+		const val = [cords.lng, cords.lat];
+		for (let i = 0; i < arr.length; i++) {
+			const item = arr[i];
+			const latDiff = Math.abs(item[1] - val[1]);
+			const lngDiff = Math.abs(item[0] - val[0]);
+			if (latDiff >= 0.005 || lngDiff >= 0.005) {
+				return { lat: item[1], lng: item[0] };
+			}
 		}
-	  }, []);
-	  
+	}
+	
+	useEffect(() => {
+		if (route != undefined) {
+			console.log('driver location', { ...simulatedDriverLocation }, route.coordinates[0]);
+			setTimeout(() => {
+				const newLocation = findFirstUnequalCoordinate(simulatedDriverLocation, route.coordinates.slice(1,) );
+				setSimulatedDriverLocation((prevLocation) => {
+					return newLocation;
+				});
+				fetchRoute(newLocation, restaurantLocation);
+				
+			}, 3000); // Wait for 3 seconds before updating the simulated driver location
+		}
+	}, [route]);
+
+
+	 useEffect(() => {
+		if (simulatedDriverLocation && restaurantLocation) {
+			console.log('this first triggers')
+		  fetchRoute(simulatedDriverLocation, restaurantLocation);
+		}
+	  }, [ restaurantLocation]);
+	
 	 const fetchRoute = async (start, end) => {
 		const url = `http://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
-
 		try {
-		  const response = await axios.get(url);
-		  let coordinates = _.cloneDeep(response.data.routes[0].geometry.coordinates);
-		  console.log('route data before swap ', coordinates )
-		  setRoute2(coordinates)
-		  coordinates = coordinates.map(cords=> [cords[1],cords[0]] )
-		  console.log('route data after wap ', coordinates)
-		  setRoute(coordinates);
-		  
+			const response = await axios.get(url);
+			let data = response.data.routes[0].geometry;
+			console.log('the fetching part is running')
+			setRoute({...data})
 		} catch (error) {
 		  console.error('Error fetching route:', error);
 		}
 	  };
-  
+ 
   return (
     <div style={{ height: '400px', width: '100%' }}>
-      
+		
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-		
-        {driverLocation && (
-        <Marker position={driverLocation}>
+		{simulatedDriverLocation && (
+        <Marker position={simulatedDriverLocation} >
           <Popup>
-            Driver Location: {driverLocation}
+            Restaurant Location: {simulatedDriverLocation}
           </Popup>
         </Marker>
       )}
+       
       {restaurantLocation && (
         <Marker position={restaurantLocation} >
           <Popup>
@@ -74,26 +84,14 @@ const DeliveryMap = ({userLocation,restaurantLocation,driverLocation}) => {
           </Popup>
         </Marker>
       )}
-		{route &&  <GeoJSON
+		{route &&  <GeoJSON key={JSON.stringify(route)}
 				data={{
 				  "type":"Feature",
 				  "geometry": {
 					"type": "LineString",
-					"coordinates": route
+					"coordinates": route.coordinates
 				  },
 				  "properties": {"name":"route3"}
-				}}
-				pathOptions={{ color: 'red' }}
-			  />
-       }
-	  {route2 &&  <GeoJSON
-				data={{
-				  "type":"Feature",
-				  "geometry": {
-					"type": "LineString",
-					"coordinates": route2
-				  },
-				  "properties": {"name":"route2"}
 				}}
 				pathOptions={{ color: 'red' }}
 			  />

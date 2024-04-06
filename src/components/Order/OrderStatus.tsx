@@ -81,14 +81,12 @@ const OrderStatusPage = () => {
 			
 			
 			  { userLocation && driverLocation && restaurantLocation &&  
-			  <MapContainer center={userLocation} zoom={11} style={{ height: "100vh" }} >
+			  <MapContainer center={userLocation} zoom={11} style={{ height: "80vh" }} >
 				<DeliveryMap  userLocation={userLocation} restaurantLocation={restaurantLocation} driverLocation={driverLocation} />
 			  </MapContainer>}
 			 
 			 </div>
-			 <div>
-			 {<DummyMap/>}
-			</div>
+			
           <p>Order ID: {order._id}</p>
           <p>Total Amount: {order.totalAmount}</p>
 		  <p> Payment Status:{order.paymentStatus} </p>
