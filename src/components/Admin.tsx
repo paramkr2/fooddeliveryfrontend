@@ -24,7 +24,7 @@ const Admin = () => {
 		try{
 			let token = localStorage.getItem('jwtToken');
 			  let headers = { 'Authorization': token };		 
-			  let res = await axios.delete(`http://localhost:8000/admin/delete`,   {headers , params:{dishId:item._id}} );
+			  let res = await axios.delete(`${import.meta.env.VITE_API_URL}/admin/delete`,   {headers , params:{dishId:item._id}} );
 			  setItems(prevItems => prevItems.filter( prevItem => prevItem._id != item._id ) )
 		}catch(err){
 			console.log('Error ', err );

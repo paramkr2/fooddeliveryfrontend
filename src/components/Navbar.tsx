@@ -95,9 +95,15 @@ const CustomNavbar = () => {
 				</Nav.Link>
 			}
 			{ isLoggedIn  && 
-				<Nav.Link as={Link} to={`/location`}>
-					Location
-				</Nav.Link>
+				( user.restaurantOwner ? ( 
+					<Nav.Link as={Link} to={`/restaurantlocation`}>
+						Location
+					</Nav.Link>
+				):(
+					<Nav.Link as={Link} to={`/userlocation`}>
+						Location
+					</Nav.Link>
+				))
 			}
             <Nav.Link as={Link} to="/cart">
 				<div className="cart-icon" style={cartIconStyle} >

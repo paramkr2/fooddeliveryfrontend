@@ -24,7 +24,7 @@ const PaymentForm = ({show,setShow}) => {
        redirect: 'if_required',
          confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: `http://localhost:5173/cart`,
+            return_url: `${import.meta.env.VITE_API_URL}/cart`,
 			shipping: {
 				name: 'Jenny Rosen',
 				address: {

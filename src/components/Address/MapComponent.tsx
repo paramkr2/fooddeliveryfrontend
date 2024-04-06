@@ -1,17 +1,25 @@
 import React, { useState, useEffect} from 'react';
-import { MapContainer, TileLayer, Marker, Popup,useMapEvents , Polygon} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup,useMapEvents , Polygon ,useMap} from 'react-leaflet';
 
 // getting displayed inconsitently without this 
 // https://stackoverflow.com/questions/40365440/react-leaflet-map-not-correctly-displayed 
 import 'leaflet/dist/leaflet.css';
 
-const MapComponent = ({getAddress}) => {
-  const [center, setCenter] = useState({ lat: 28.666, lng: 77.182 }); // Initial center position
+const MapComponent = ({getAddress,center,setCenter}) => {
+  //const [center, setCenter] = useState({ lat: 28.666, lng: 77.182 }); // Initial center position
 	 const [bounds , setBounds ] = useState([]);
+	 const map = useMap();
 	 
 	 useEffect( ()=> {
+		console.log('changed',center)
+		if( center){
+			console.log('flying')
+			map.flyTo(center)
+		}
+	 },[center])
+	 useEffect( ()=> {
 		getCitiesBounds();
-	 },[bounds])
+	 },[])
 	const getCitiesBounds = async()=>{
 		try {
 		   const res = await fetch(`https://nominatim.openstreetmap.org/search.php?q=Delhi+India&polygon_geojson=1&format=json`)
@@ -47,12 +55,7 @@ const MapComponent = ({getAddress}) => {
 
   return (
     <div style={{ height: '400px', width: '100%' }}>
-      <MapContainer
-        center={center}
-		zoom={13}
-        style={{ height: '100%', width: '100%' }}
-		
-      >
+      
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -60,7 +63,7 @@ const MapComponent = ({getAddress}) => {
 		<GetCurrentCoordinates/>
 		{ bounds && <Polygon  positions={bounds} pathOptions={{ color: 'blue' }}/> }
       
-		/*
+		
         <Marker
           position={[center.lat, center.lng]} // Using center as position
           draggable={true} // Boolean value, no need to wrap in quotes
@@ -70,8 +73,8 @@ const MapComponent = ({getAddress}) => {
             <span>y</span>
           </Popup>
         </Marker>
-      */
-	  </MapContainer>
+      
+	  
     </div>
   );
 };

@@ -27,7 +27,7 @@ const Cart = () => {
 	
 	const confirmPayment = async  ()=>{
 		// First create payment Intent. we'll look at refreshing the cart content later .
-		const res = await axios.post("http://localhost:8000/payment/create", {
+		const res = await axios.post(`${import.meta.env.VITE_API_URL}/payment/create`, {
 		  amount: cartTotal ,
 		  currency: 'INR',
 		  description:'Softwere solutions' // send description here and shipping while confirming payment 
@@ -41,7 +41,7 @@ const Cart = () => {
 		let token = localStorage.getItem('jwtToken');
 		 let headers = { 'Authorization': token };		
 		 let payload = {paymentIntentId:res.data.id, total:cartTotal , cart:cart }
-		const response = await axios.post('http://localhost:8000/order/create', payload  , {headers})
+		const response = await axios.post(`${import.meta.env.VITE_API_URL}/order/create`, payload  , {headers})
 		console.log(response.body);
 		// then set showPayment form to trigger payment form render
 		setShowPaymentForm(true);
