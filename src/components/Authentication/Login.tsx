@@ -2,7 +2,7 @@ import React, { useState,useContext } from 'react';
 import axios from 'axios';
 import { Button, Form , Alert , Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import {AuthContext} from '../context/AuthContext' 
+import {AuthContext} from '../../context/AuthContext' 
 import {jwtDecode} from 'jwt-decode';
 
 const Login = () => {

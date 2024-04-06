@@ -7,8 +7,10 @@ import Navbar from './components/Navbar'; // Assuming you have a Navbar componen
 
 import Restaurant from './components/Restaurant';
 import Home from './components/Home'; 
-import Login from './components/Login';
-import Signup from './components/Signup';
+
+import Login from './components/Authentication/Login';
+import Signup from './components/Authentication/Signup';
+
 import Cart from './components/Cart';
 import Admin from './components/Admin'
 
@@ -32,7 +34,7 @@ function App() {
 		<div className="App">
 			<Navbar />
 			<ToastContainer />
-			<div className="container mt-4">
+			<div className="container " >
 				<Routes>
 				  <Route exact path="/" element={<Home />} />
 				  <Route exact path="/login" element={<Login />} />
@@ -56,7 +58,7 @@ function App() {
 					<div className="text-center p-4">
 					© Copyright - 
 					<a target="_blank" className="text-reset fw-bold text-decoration-none" href="https://twitter.com" >
-						Paramanand Kumar
+						Food Delivery Frontend Tecnologies
 					</a>
 				</div>
 			</footer>
