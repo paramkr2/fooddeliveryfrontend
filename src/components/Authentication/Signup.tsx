@@ -70,7 +70,7 @@ const Signup = () => {
     };
 
     return (
-		<div className="background">
+		
 			<Row  className="background">
 				<Col md={4} className="form-container ">
 					{ error && <Alert variant='danger'> {error} </Alert> }
@@ -117,7 +117,6 @@ const Signup = () => {
 					<img src={DeliveryImage} alt="Food"/>
 				</Col>
 			</Row>
-		</div>
     );
 };
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import Skeleton from '@mui/material/Skeleton';
+
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
@@ -51,6 +53,21 @@ const Home = () => {
   useEffect(() => {
     restList();
   }, []);
+
+	if (loading) {
+		// Return three skeleton components while loading
+		return (
+		  <div className="row">
+			{[...Array(3)].map((_, index) => (
+			  <div className="col-md-4" key={index}>
+				<Skeleton variant="rectangular" height={150} />
+				<Skeleton heignt={30} />
+				<Skeleton height={20} width={'50%'} />
+			  </div>
+			))}
+		  </div>
+		);
+	  }
 
   return (
     <div>

@@ -3,10 +3,14 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Dish from './Dish';
 import { Row, Col } from 'react-bootstrap';
+
+import Skeleton from '@mui/material/Skeleton';
+
+
 const RestaurantComponent = () => {
 	
   const { id } = useParams();
-  const [dishes, setDishes] = useState([]);
+  const [dishes, setDishes] = useState(null);
 	
 	const fetchData = async () => {
 			  try {
@@ -23,6 +27,21 @@ const RestaurantComponent = () => {
 	 useEffect(() => {
 		fetchData();
 	  }, [id]);
+
+	if (!dishes) {
+			// Return three skeleton components while loading
+			return (
+			  <div className="row">
+				{[...Array(3)].map((_, index) => (
+				  <div className="col-md-4" key={index}>
+					<Skeleton variant="rectangular" height={150} />
+					<Skeleton heignt={30} />
+					<Skeleton height={20} width={'50%'} />
+				  </div>
+				))}
+			  </div>
+			);
+		  }
 
   return (
     <div>

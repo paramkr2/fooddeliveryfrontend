@@ -25,6 +25,7 @@ import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
 
 
+
 function App() {
 	
   return (

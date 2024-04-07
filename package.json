@@ -11,6 +11,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.15",
+    "@mui/material": "^5.15.15",
     "@stripe/react-stripe-js": "^2.6.2",
     "@stripe/stripe-js": "^3.1.0",
     "axios": "^1.6.7",
@@ -20,6 +24,7 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lodash": "^4.17.21",
+    "mui": "^0.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",

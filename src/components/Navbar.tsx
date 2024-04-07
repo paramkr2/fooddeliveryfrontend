@@ -1,8 +1,18 @@
 import React, { useContext, useEffect , useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Navbar';
+
+// mui 
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import MailIcon from '@mui/icons-material/Mail';
+
 import {AuthContext} from '../context/AuthContext' 
 import {CartContext} from '../context/CartContext'
 import {jwtDecode} from 'jwt-decode';
@@ -11,13 +21,12 @@ const CustomNavbar = () => {
   const { isLoggedIn, user , dispatch } = useContext(AuthContext);
   const { cart } = useContext(CartContext);
   const [cartCount, setCartCount] = useState(Object.keys(cart.items).length);
-	
-	useEffect(() => {
-		setCartCount(Object.keys(cart.items).length);
-		animateCart();
-	  }, [cart.items]);
   
-	useEffect(() => {
+  useEffect(() => {
+    setCartCount(Object.keys(cart.items).length);
+  }, [cart.items]);
+  
+  useEffect(() => {
         // Check for the token in local storage when the component mounts
         const token = localStorage.getItem('jwtToken');
 
@@ -36,20 +45,14 @@ const CustomNavbar = () => {
             }
         }
     }, [dispatch]); 
-	
-	const handleLogout = () => {
+  
+  const handleLogout = () => {
     // Clear the stored token and update the authentication status
     localStorage.removeItem('jwtToken');
     dispatch({type:'LOGOUT'})
   };
-	const animateCart = () => {
-    const icon = document.querySelector('.cart-icon');
-    icon.classList.add('cart-icon-animate');
-    setTimeout(() => {
-      icon.classList.remove('cart-icon-animate');
-    }, 1000); // Duration of animation in milliseconds
-  };
-	const cartIconStyle = {
+ 
+  const cartIconStyle = {
     backgroundColor: cartCount > 0 ? 'green' : 'transparent',
     color: cartCount > 0 ? '#fff' : '#000',
     border: '1px solid #ccc',
@@ -59,61 +62,62 @@ const CustomNavbar = () => {
     transition: 'background-color 0.3s, color 0.3s'
   };
   
-	return (
-    <Navbar bg="primary" variant="dark">
-      <div className="container-fluid">
-        <Navbar.Brand as={Link} to="/">
-          Food Delivery Frontend
-        </Navbar.Brand>
-        <Nav className="ml-auto">
-          <Container>
-            <Nav.Link as={Link} to="/">
+  return (
+    <AppBar position="static">
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Container>
+          <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}>
+            Food Delivery Frontend
+          </Typography>
+         
+            <Button component={Link} to="/" color="inherit" sx={{ mr: 2 }}>
               Home
-            </Nav.Link>
+            </Button>
             {isLoggedIn ? (
-              <Nav.Link className="btn btn-link" onClick={handleLogout} data-testid="logout-link">
+              <Button color="inherit" onClick={handleLogout} data-testid="logout-link">
                 Logout
-              </Nav.Link>
+              </Button>
             ) : (
-              <Nav.Link as={Link} to="/login">
+              <Button component={Link} to="/login" color="inherit">
                 Login
-              </Nav.Link>
+              </Button>
             )}
             {!isLoggedIn && (
-              <Nav.Link as={Link} to="/signup">
+              <Button component={Link} to="/signup" color="inherit">
                 Signup
-              </Nav.Link>
+              </Button>
             )}
-			{ isLoggedIn && user.restaurantOwner && 
-				<Nav.Link as={Link} to={`/admin`}>
-					Admin
-				</Nav.Link>
-			}
-			{ isLoggedIn  && 
-				<Nav.Link as={Link} to={`/orderlist/1`}>
-					History
-				</Nav.Link>
-			}
-			{ isLoggedIn  && 
-				( user.restaurantOwner ? ( 
-					<Nav.Link as={Link} to={`/restaurantlocation`}>
-						Location
-					</Nav.Link>
-				):(
-					<Nav.Link as={Link} to={`/userlocation`}>
-						Location
-					</Nav.Link>
-				))
-			}
-            <Nav.Link as={Link} to="/cart">
-				<div className="cart-icon" style={cartIconStyle} >
-				<div className="cart-icon-content">Cart:{cartCount}</div>
-			  </div>
-            </Nav.Link>
-          </Container>
-        </Nav>
-      </div>
-    </Navbar>
+            { isLoggedIn && user.restaurantOwner && 
+              <Button component={Link} to={`/admin`} color="inherit">
+                Admin
+              </Button>
+            }
+            { isLoggedIn  && 
+              <Button component={Link} to={`/orderlist/1`} color="inherit">
+                History
+              </Button>
+            }
+            { isLoggedIn  && 
+              ( user.restaurantOwner ? ( 
+                <Button component={Link} to={`/restaurantlocation`} color="inherit">
+                  Location
+                </Button>
+              ):(
+                <Button component={Link} to={`/userlocation`} color="inherit">
+                  Location
+                </Button>
+              ))
+            }
+            <IconButton component={Link} to="/cart" color="inherit">
+              <Badge badgeContent={cartCount} color="secondary">
+                <ShoppingCartIcon className="cart-icon"  />
+              </Badge>
+            </IconButton>
+			
+			
+        </Container>
+      </Toolbar>
+    </AppBar>
   );
 };
 
