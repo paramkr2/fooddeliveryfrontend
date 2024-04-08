@@ -85,7 +85,7 @@ const Home = () => {
                   <div className="card-body">
                     <h5 className="card-title">{restaurant.name}</h5>
                     <p className="card-text">Travel Time: {restaurant.travelTime} minutes</p>
-                    <img src="path/to/default-image.jpg" alt="Default" className="card-img-top" />
+                    <img src={restaurant.imagePath ? `${import.meta.env.VITE_API_URL}/${restaurant.imagePath}` : ''} alt="Default" className="card-img-top" />
                   </div>
                 </div>
               </Link>

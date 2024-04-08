@@ -16,7 +16,7 @@ import Admin from './components/Admin'
 
 import OrderStatus from './components/Order/OrderStatus'
 import OrderList from './components/Order/OrderList'
-import OrderHistory from './components/AdminComponents/Orders'
+import OrderHistory from './components/Admin/Orders'
 
 import UserAddressUpdatePage from './components/Address/UserAddressUpdatePage'
 import RestaurantAddressUpdatePage from './components/Address/RestaurantAddressUpdatePage'

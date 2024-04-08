@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import AddItemModal from './AdminComponents/AddItemModal';
-import UpdateItemModal from './AdminComponents/UpdateItemModal';
+import AddItemModal from './Admin/AddItemModal';
+import UpdateItemModal from './Admin/UpdateItemModal';
+import EditRestaurantInformationModal from './Admin/EditRestaurantInformationModal'
 import axios from 'axios';
-import DishAdmin from './AdminComponents/DishAdmin';
+import DishAdmin from './Admin/DishAdmin';
 import {useNavigate} from 'react-router-dom';
 
 
@@ -11,6 +12,7 @@ const Admin = () => {
   const [items, setItems] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [ showRestEdit , setShowRestEdit]= useState(false);
   const [selectedItem, setSelectedItem] = useState(null); // State to store the selected item
 	const navigate = useNavigate()
 	
@@ -53,9 +55,10 @@ const Admin = () => {
     <div>
       <Button variant="primary" onClick={() => setShowAddModal(true)}>Add Item</Button>
 		<Button variant="primary" onClick={() => navigate('/admin/orders')}>Orders</Button>
-
-      <AddItemModal show={showAddModal} setShow={setShowAddModal} setItems={setItems} />
+		 <Button variant="primary" onClick={() => setShowRestEdit(true)}>Edit Restaurant Infromation</Button>
       
+	  <AddItemModal show={showAddModal} setShow={setShowAddModal} setItems={setItems} />
+      <EditRestaurantInformationModal show={showRestEdit} setShow={setShowRestEdit} />
       <UpdateItemModal show={showEditModal} setShow={setShowEditModal} item={selectedItem} setItems={setItems} />
 
       <div>
