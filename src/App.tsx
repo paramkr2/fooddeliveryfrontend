@@ -24,7 +24,7 @@ import RestaurantAddressUpdatePage from './components/Address/RestaurantAddressU
 import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
 
-
+import {Container } from '@mui/material';
 
 function App() {
 	
@@ -35,7 +35,7 @@ function App() {
 		<div className="App">
 			<Navbar />
 			<ToastContainer />
-			<div className="container " >
+			<Container>
 				<Routes>
 				  <Route exact path="/" element={<Home />} />
 				  <Route exact path="/login" element={<Login />} />
@@ -54,7 +54,7 @@ function App() {
 					<Route exact path="/userlocation" element={<UserAddressUpdatePage/>} />
 					<Route exact path ="/restaurantlocation" element = {<RestaurantAddressUpdatePage/>} /> 
 				</Routes>
-			</div>
+			</Container>
 			<footer className="text-center text-lg-start bg-light text-muted mt-4">
 					<div className="text-center p-4">
 					© Copyright - 

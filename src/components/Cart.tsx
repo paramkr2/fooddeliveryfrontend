@@ -15,6 +15,7 @@ const Cart = () => {
 	const [clientSecret, setClientSecret] = useState(null);
 	const [showPaymentFrom,setShowPaymentForm] = useState(false);
 	const [cartTotal,setCartTotal] = useState(0);
+	
 	useEffect(() => {
 		console.log('Items changed:', cart);
 	  // this should update the total amount 

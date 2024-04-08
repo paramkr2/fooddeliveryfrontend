@@ -35,7 +35,8 @@ const Dish = ({ item, restaurantId }) => {
         _id: item._id,
         quantity: quantity,
         name: item.name,
-        price: item.price
+        price: item.price,
+		imagePath:item.imagePath
       }
     });
   };
@@ -73,6 +74,9 @@ const Dish = ({ item, restaurantId }) => {
         <Typography variant="body2" color="text.secondary">
           Price: Rupee:{item.price}
         </Typography>
+		<Typography variant="body3" className="quantity smaller">
+            {item.description}
+          </Typography>
         <div className="quantity-controls"  style={{ display: 'flex', alignItems: 'center',justifyContent: 'center'  }}>
           <IconButton aria-label="decrease quantity" onClick={handleDecreaseQuantity}>
             <RemoveIcon />
@@ -80,6 +84,7 @@ const Dish = ({ item, restaurantId }) => {
           <Typography variant="body2" className="quantity smaller">
             {quantity}
           </Typography>
+		   
           <IconButton aria-label="increase quantity" onClick={handleIncreaseQuantity}>
             <AddIcon />
           </IconButton>
