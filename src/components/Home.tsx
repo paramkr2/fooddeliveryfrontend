@@ -1,44 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import {AuthContext} from '../context/AuthContext'
+import {LocationContext} from '../context/LocationContext'
 import Skeleton from '@mui/material/Skeleton';
 
 const Home = () => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true); // Added loading state
-
+	const [restaurants, setRestaurants] = useState([]);
+	const [loading, setLoading] = useState(true); // Added loading state
+	const {location,setLocation}= useContext(LocationContext)
+	const {isLoggedIn} = useContext(AuthContext)
+	
+	
+	const fetchAndSetLocation = async()=>{
+		try{
+			let token = localStorage.getItem('jwtToken');
+            let headers = { 'Authorization': token };
+           const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/address`, { headers });
+           const location = response.data.location.coordinates ;
+			setLocation ({lat:location[0],lng:location[1]})
+		}catch(err){
+			console.log(err);
+		}
+	}
+	useEffect( ()=> {
+		if(isLoggedIn ){
+			console.log('fetchsetlcoation')
+			fetchAndSetLocation() ;
+		}
+	},[isLoggedIn])
+	
   const restList = async () => {
     try {
-      const token = localStorage.getItem('jwtToken');
-      const headers = token
-        ? {
-            Authorization: `${token}`,
-            'Content-Type': 'application/json',
-          }
-        : {
-            'Content-Type': 'application/json',
-          };
-
       const response = await axios.get(
-       `${import.meta.env.VITE_API_URL}/restaurant/nearby`,
-        {
-          headers,
-          params: {
-            location: {
-              type: 'Point',
-              coordinates:  [28.666681811136993,77.20675182681249] //[-122.4195, 37.7748],
-            } as any,
-          },
-        }
-      );
+			`${import.meta.env.VITE_API_URL}/restaurant/nearby`,
+			{  params: {location}, } 
+		);
 
       if (response.status === 200) {
         setRestaurants(response.data);
       } else {
         console.error('Error fetching restaurants:', error);
-
-        // Handle unauthorized or other errors here
         if (error.response && error.response.status === 401) {
           console.log('User is not logged in');
         }
@@ -52,9 +55,9 @@ const Home = () => {
 
   useEffect(() => {
     restList();
-  }, []);
+  }, [location]);
 
-	if (loading) {
+	if (loading ) {
 		// Return three skeleton components while loading
 		return (
 		  <div className="row">

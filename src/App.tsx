@@ -23,6 +23,7 @@ import RestaurantAddressUpdatePage from './components/Address/RestaurantAddressU
 
 import {AuthProvider} from './context/AuthContext'
 import {CartProvider} from './context/CartContext'
+import  {LocationProvider} from './context/LocationContext'
 
 import {Container } from '@mui/material';
 
@@ -32,38 +33,40 @@ function App() {
 	
 	<AuthProvider>
 		<CartProvider>
-		<div className="App">
-			<Navbar />
-			<ToastContainer />
-			<Container>
-				<Routes>
-				  <Route exact path="/" element={<Home />} />
-				  <Route exact path="/login" element={<Login />} />
-				  <Route exact path="/signup" element={<Signup />} />
-				  
-					<Route exact path="/cart" element={<Cart />} />
-				 
-				  <Route exact path="/restaurant/:id" element={<Restaurant />} />
-				  <Route exact path="/admin" element={<Admin/>} /> 
-					<Route exact path="/order/:orderId" element={<OrderStatus/>} />
-					<Route exact path="/orderlist/:page" element={<OrderList/>} />
-					<Route exact path="/admin/orders" element={<OrderHistory/>} />
-					
-					// i may have to chang ethe name, because no piont of conditionallity here
-					// that shold be done in navbar. 
-					<Route exact path="/userlocation" element={<UserAddressUpdatePage/>} />
-					<Route exact path ="/restaurantlocation" element = {<RestaurantAddressUpdatePage/>} /> 
-				</Routes>
-			</Container>
-			<footer className="text-center text-lg-start bg-light text-muted mt-4">
-					<div className="text-center p-4">
-					© Copyright - 
-					<a target="_blank" className="text-reset fw-bold text-decoration-none" href="https://twitter.com" >
-						Food Delivery Frontend Tecnologies
-					</a>
+			<LocationProvider>
+				<div className="App">
+					<Navbar />
+					<ToastContainer />
+					<Container>
+						<Routes>
+						  <Route exact path="/" element={<Home />} />
+						  <Route exact path="/login" element={<Login />} />
+						  <Route exact path="/signup" element={<Signup />} />
+						  
+							<Route exact path="/cart" element={<Cart />} />
+						 
+						  <Route exact path="/restaurant/:id" element={<Restaurant />} />
+						  <Route exact path="/admin" element={<Admin/>} /> 
+							<Route exact path="/order/:orderId" element={<OrderStatus/>} />
+							<Route exact path="/orderlist/:page" element={<OrderList/>} />
+							<Route exact path="/admin/orders" element={<OrderHistory/>} />
+							
+							// i may have to chang ethe name, because no piont of conditionallity here
+							// that shold be done in navbar. 
+							<Route exact path="/userlocation" element={<UserAddressUpdatePage/>} />
+							<Route exact path ="/restaurantlocation" element = {<RestaurantAddressUpdatePage/>} /> 
+						</Routes>
+					</Container>
+					<footer className="text-center text-lg-start bg-light text-muted mt-4">
+							<div className="text-center p-4">
+							© Copyright - 
+							<a target="_blank" className="text-reset fw-bold text-decoration-none" href="https://twitter.com" >
+								Food Delivery Frontend Tecnologies
+							</a>
+						</div>
+					</footer>
 				</div>
-			</footer>
-		</div>
+			</LocationProvider>
 		</CartProvider>
 	</AuthProvider>
 
