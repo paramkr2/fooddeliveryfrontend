@@ -2,7 +2,7 @@
 import React , {useState,useEffect} from 'react';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
 import { MapContainer} from 'react-leaflet';
-
+import {toast} from 'react-toastify'
 import MapComponent from './MapComponent';
 import axios from 'axios';
 const Map = () => {
@@ -29,12 +29,14 @@ const Map = () => {
 							lng: response.data?.location?.coordinates[1]
 						})
         } catch (error) {
-			if( response.status == 404){
+			if( error.status == 404){
 				// some kind toast is need 
 				console.log('No previous address found ')
+                toast.error('No previous error found')
 				return ;
 			}
             console.error('Error fetching previous address:', error);
+            toast.error(error.response.data.msg)
         } finally {
             setLoading(false);
         }
@@ -75,7 +77,8 @@ const Map = () => {
             console.log('API call successful');
         } catch (error) {
             console.error('Error occurred during API call:', error);
-        } finally {
+            toast.error(error.response.data.msg)
+           } finally {
             setLoading(false);
         }
     };
@@ -91,9 +94,6 @@ const Map = () => {
    return (
         <Container fluid>
             <Row>
-			
-			
-			
                 <Col xs={12} md={9}>
 					<MapContainer  center={center} zoom={13} style={{ height: '100%', width: '100%' }} whenCreated={map => setMap( map )  } >
 						<MapComponent getAddress={getAddress} center = {center} setCenter={setCenter}/>

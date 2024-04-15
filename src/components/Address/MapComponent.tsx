@@ -58,15 +58,14 @@ const MapComponent = ({getAddress,center,setCenter}) => {
       
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+          />
 		<GetCurrentCoordinates/>
 		{ bounds && <Polygon  positions={bounds} pathOptions={{ color: 'blue' }}/> }
       
 		
         <Marker
           position={[center.lat, center.lng]} // Using center as position
-          draggable={true} // Boolean value, no need to wrap in quotes
+           // Boolean value, no need to wrap in quotes
           //eventHandlers={eventHandlers}
         >
           <Popup>

@@ -39,22 +39,22 @@ function App() {
 					<ToastContainer />
 					<Container>
 						<Routes>
-						  <Route exact path="/" element={<Home />} />
-						  <Route exact path="/login" element={<Login />} />
-						  <Route exact path="/signup" element={<Signup />} />
+						  <Route  path="/" element={<Home />} />
+						  <Route  path="/login" element={<Login />} />
+						  <Route  path="/signup" element={<Signup />} />
 						  
-							<Route exact path="/cart" element={<Cart />} />
+							<Route  path="/cart" element={<Cart />} />
 						 
-						  <Route exact path="/restaurant/:id" element={<Restaurant />} />
-						  <Route exact path="/admin" element={<Admin/>} /> 
-							<Route exact path="/order/:orderId" element={<OrderStatus/>} />
-							<Route exact path="/orderlist/:page" element={<OrderList/>} />
-							<Route exact path="/admin/orders" element={<OrderHistory/>} />
+						  <Route  path="/restaurant/:id" element={<Restaurant />} />
+						  <Route  path="/admin" element={<Admin/>} /> 
+							<Route  path="/order/:orderId" element={<OrderStatus/>} />
+							<Route  path="/orderlist/:page" element={<OrderList/>} />
+							<Route  path="/admin/orders" element={<OrderHistory/>} />
 							
 							// i may have to chang ethe name, because no piont of conditionallity here
 							// that shold be done in navbar. 
-							<Route exact path="/userlocation" element={<UserAddressUpdatePage/>} />
-							<Route exact path ="/restaurantlocation" element = {<RestaurantAddressUpdatePage/>} /> 
+							<Route  path="/userlocation" element={<UserAddressUpdatePage/>} />
+							<Route  path ="/restaurantlocation" element = {<RestaurantAddressUpdatePage/>} /> 
 						</Routes>
 					</Container>
 					<footer className="text-center text-lg-start bg-light text-muted mt-4">
