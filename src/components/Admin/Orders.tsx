@@ -12,7 +12,7 @@ const OrderHistory = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/orders/today', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/orders/today`, {
         headers: { Authorization: token }
       });
 	  console.log('admin/orders',response.data)
@@ -24,7 +24,7 @@ const OrderHistory = () => {
 
   const handleAcceptOrder = async (orderId) => {
     try {
-      const res = await axios.put(`http://localhost:8000/admin/orders/${orderId}/accept`, null, {
+      const res = await axios.put(`${import.meta.env.VITE_API_URL}/admin/orders/${orderId}/accept`, null, {
         headers: { Authorization: token }
       });
       setOrders(prevOrders => {

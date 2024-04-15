@@ -50,7 +50,7 @@ const UpdateItemModal = ({ item, show, setShow, setItems }) => {
       formDataToSend.append('price', formData.price);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('image', formData.image); // Append image file to FormData
-      let res = await axios.post(`http://localhost:8000/admin/update`, formDataToSend, { headers });
+      let res = await axios.post(`${import.meta.env.VITE_API_URL}/admin/update`, formDataToSend, { headers });
 	  console.log(res.data );
       handleClose(); // Close the modal after submission
       setItems(prevItems => prevItems.map(prevItem => prevItem._id == item._id ? res.data : prevItem));

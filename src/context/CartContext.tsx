@@ -3,7 +3,24 @@ import axios from 'axios';
 import { AuthContext } from './AuthContext'; // Import your AuthContext
 export const CartContext = createContext();
 
-const initialState = {restaurantId :null, items:{}}
+type CartState = {
+  restaurantId: string | null;
+  items: { [itemId: string]: CartItem };
+};
+
+// Define the type for a single item in the cart
+type CartItem = {
+  _id: string;
+  quantity: number;
+  price: number;
+  // Add any other properties of a cart item here
+};
+
+const initialState: CartState = {
+  restaurantId: null,
+  items: {},
+};
+
 export const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TO_CART':
@@ -28,22 +45,6 @@ export const cartReducer = (state, action) => {
   }
 };
 
-/*
-// cartReducer.js
-export const cartReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_TO_CART':
-      return [...state, action.payload];
-    case 'REMOVE_FROM_CART':
-      return state.filter(item => item.id !== action.payload);
-    case 'CLEAR_CART':
-      return [];
-    default:
-      return state;
-  }
-};
-
-*/
 
 export const CartProvider = ({ children }) => {
 	  const [cart, dispatch] = useReducer(cartReducer, initialState , () => {

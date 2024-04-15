@@ -20,10 +20,10 @@ import {jwtDecode} from 'jwt-decode';
 const CustomNavbar = () => {
   const { isLoggedIn, user , dispatch } = useContext(AuthContext);
   const { cart } = useContext(CartContext);
-  const [cartCount, setCartCount] = useState(Object.keys(cart.items).length);
+  const [cartCount, setCartCount] = useState( null);
   
   useEffect(() => {
-    setCartCount(Object.keys(cart.items).length);
+    setCartCount( cart.items ? Object.keys(cart.items).length : 0);
   }, [cart.items]);
   
   useEffect(() => {
@@ -92,7 +92,7 @@ const CustomNavbar = () => {
                 Admin
               </Button>
             }
-            { isLoggedIn  && 
+            { isLoggedIn  && !user.restaurantOwner && 
               <Button component={Link} to={`/orderlist/1`} color="inherit">
                 History
               </Button>

@@ -19,7 +19,7 @@ const EditRestaurantInformationModal = ({ show, setShow }) => {
           // Fetch item details here
 		  const token = localStorage.getItem('jwtToken');
 			const headers = { 'Authorization': token };
-          const response = await axios.get('http://localhost:8000/admin/getRestaurantInformation',{headers}); // Replace with your API endpoint
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/getRestaurantInformation`,{headers}); // Replace with your API endpoint
           setFormData({
             name: response.data.name || '',
             phone: response.data.phone || '',
@@ -62,7 +62,7 @@ const EditRestaurantInformationModal = ({ show, setShow }) => {
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('image', formData.image);
-      const response = await axios.post('http://localhost:8000/admin/updateRestaurantInformation', formDataToSend, { headers });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/updateRestaurantInformation`, formDataToSend, { headers });
       handleClose();
       toast.success('Item Successfully updated');
       return response.data; // Return the updated item data
@@ -80,7 +80,11 @@ const EditRestaurantInformationModal = ({ show, setShow }) => {
   };
 
   return (
-    <Modal open={show} onClose={handleClose}>
+    <Modal open={show} onClose={handleClose} sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
       <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '8px', maxWidth: '400px', margin: 'auto' }}>
         {loading ? (
           <div style={{ textAlign: 'center' }}>

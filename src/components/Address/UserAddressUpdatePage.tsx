@@ -1,93 +1,70 @@
-// Map.js
-import React , {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
-import MapComponent from './MapComponent';
-import { MapContainer} from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
+import { fetchPreviousAddress, updateAddress , getAddressFromCoordinates} from './UserAddressUpdatePageHelper';
 
-import axios from 'axios';
+import MapComponent from './MapComponent';
+
 const Map = () => {
-	const [loading, setLoading] = useState(false);
-     const [address, setAddress] = useState({
-		neighbourhood:"",
-		city:'',
+    const [loading, setLoading] = useState(false);
+    const [address, setAddress] = useState({
+        neighbourhood: "",
+        city: '',
         country: 'India',
         postcode: '110052',
         state: 'Delhi',
     });
-	const getAddress = async (coords) => {
-		console.log(coords)
-		const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&accept-language=ua`)
-		 const data = await res.json()
-		 const addr = { 
-								city:data.address.city || '',
-								state_district: data.address.state_district || '' , 
-								state: data.address.state,
-								country: data.address.country,
-								postcode: data.address.postcode,
-								neighbourhood: data.address.neighbourhood|| '',
-								location:{type:'Point',coordinates:[coords.lat,coords.lng]}
-								}
-		console.log(data.address,addr)
-		setAddress(addr);
-	
-	}
-	
-	const handleFormSubmit = async (event) => {
+
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
 
         try {
-            // Make API call here with the form data
-			let token = localStorage.getItem('jwtToken');
-			let headers = { 'Authorization': token };		
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/address`, address, { headers });
-			console.log(response.data);
-            console.log('API call successful');
+            let token = localStorage.getItem('jwtToken');
+            await updateAddress(token, address);
         } catch (error) {
-            console.error('Error occurred during API call:', error);
+            console.error('Error occurred during form submission:', error);
         } finally {
             setLoading(false);
         }
     };
-	
-	const handleAddressChange = (event) => {
+
+    const handleAddressChange = (event) => {
         setAddress({
             ...address,
             [event.target.name]: event.target.value
         });
     };
 
-	const [center,setCenter] = useState({ lat: 28.666, lng: 77.182 })
-	
-	const fetchPreviousAddress = async () => {
+    const [center, setCenter] = useState({ lat: 28.666, lng: 77.182 });
+
+    const fetchAddress = async () => {
         try {
-            // Make API call to fetch previous address and location
             let token = localStorage.getItem('jwtToken');
-            let headers = { 'Authorization': token };
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/address`, { headers });
-           
-            setAddress(response.data);
-			setCenter({ lat: response.data?.location?.coordinates[0], 
-							lng: response.data?.location?.coordinates[1]
-						})
+            const addressData = await fetchPreviousAddress(token);
+            setAddress(addressData);
+            setCenter({ lat: addressData?.location?.coordinates[0], lng: addressData?.location?.coordinates[1] });
         } catch (error) {
-			if( response.status == 404){
-				// some kind toast is needed
-				console.log('No previous address found ')
-				return ;
-			}
-            console.error('Error fetching previous address:', error);
-        } finally {
-            setLoading(false);
+            console.error('Error fetching address:', error);
         }
     };
-	
-	useEffect(() => {
-        fetchPreviousAddress();
-    }, []); 
+
+    const getAddress = async (coords) => {
+        try {
+            const addr = await getAddressFromCoordinates(coords);
+            setAddress(addr);
+        } catch (error) {
+            console.error('Error getting address from coordinates:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAddress();
+    }, []);
 
    return (
         <Container fluid>
+            
             <Row>
                <Col xs={12} md={9}>
 					<MapContainer  center={center} zoom={13} style={{ height: '100%', width: '100%' }} whenCreated={map => setMap( map )  } >
@@ -97,8 +74,8 @@ const Map = () => {
                 <Col xs={12} md={3}>
                     <Form onSubmit={handleFormSubmit}>
                         <Form.Group controlId="addressForm">
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control type="text" placeholder="H No and Locality " value={address.road} name="road" onChange={handleAddressChange} />
+                            <Form.Label>Neighbourhood</Form.Label>
+                            <Form.Control type="text" placeholder="H No and Locality " value={address.neighbourhood} name="neighbourhood" onChange={handleAddressChange} />
                         </Form.Group>
 						
                         <Form.Group controlId="cityForm">
