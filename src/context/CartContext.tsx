@@ -5,7 +5,7 @@ export const CartContext = createContext();
 
 type CartState = {
   restaurantId: string | null;
-  items: { [itemId: string]: CartItem };
+  items: { [key: string]: CartItem };
 };
 
 // Define the type for a single item in the cart

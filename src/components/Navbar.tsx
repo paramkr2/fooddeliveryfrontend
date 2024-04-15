@@ -23,8 +23,9 @@ const CustomNavbar = () => {
   const [cartCount, setCartCount] = useState( null);
   
   useEffect(() => {
-    setCartCount( cart.items ? Object.keys(cart.items).length : 0);
-  }, [cart.items]);
+    setCartCount(  Object.keys(cart.items).length);
+    
+  }, [cart]);
   
   useEffect(() => {
         // Check for the token in local storage when the component mounts
@@ -52,15 +53,6 @@ const CustomNavbar = () => {
     dispatch({type:'LOGOUT'})
   };
  
-  const cartIconStyle = {
-    backgroundColor: cartCount > 0 ? 'green' : 'transparent',
-    color: cartCount > 0 ? '#fff' : '#000',
-    border: '1px solid #ccc',
-    borderRadius: '50%',
-    padding: '5px 10px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s, color 0.3s'
-  };
   
   return (
     <AppBar position="static">

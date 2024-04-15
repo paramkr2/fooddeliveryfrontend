@@ -15,7 +15,7 @@ const Cart = () => {
   const [cartTotal, setCartTotal] = useState(0);
 
   useEffect(() => {
-    
+    	
       const ctotal = Object.keys(cart.items).reduce((total, itemIndex) => {
         return total + cart.items[itemIndex].quantity * cart.items[itemIndex].price;
       }, 0);
