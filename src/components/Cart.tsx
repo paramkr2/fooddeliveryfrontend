@@ -49,24 +49,24 @@ const Cart = () => {
     <div>
       <h2>Cart</h2>
       <Grid container spacing={2}>
-        { cartTotal == 0  && (
+        { ! cart  && (
           <Grid item xs={12}>
             <div>Cart is empty</div>
           </Grid>
         )}
-        {
+        { cart && 
           Object.keys(cart.items).map((itemIndex) => (
             <Grid item key={cart.items[itemIndex]._id} xs={12} sm={6} md={4}>
               <Dish item={cart.items[itemIndex]} restaurantId={cart.restaurantId} />
             </Grid>
           ))}
       </Grid>
-      {cartTotal !== 0 && clientSecret && (
+      { cart && clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <PaymentForm show={showPaymentForm} setShow={setShowPaymentForm} />
         </Elements>
       )}
-      {cartTotal !== 0  && (
+      { cart  && (
       	<Button onClick={confirmPayment}>Confirm and Pay ₹{cartTotal}</Button>
     	)}
     </div>

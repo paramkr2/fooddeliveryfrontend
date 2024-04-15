@@ -23,8 +23,10 @@ const CustomNavbar = () => {
   const [cartCount, setCartCount] = useState( null);
   
   useEffect(() => {
-    setCartCount(  Object.keys(cart.items).length);
+    console.log('In navbar ', cart )
     
+     setCartCount(  Object.keys(cart.items).length);
+     
   }, [cart]);
   
   useEffect(() => {

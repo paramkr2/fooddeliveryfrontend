@@ -21,39 +21,43 @@ const initialState: CartState = {
   items: {},
 };
 
-export const cartReducer = (state, action) => {
+// making the return typesafe 
+export const cartReducer = (cart, action):CartState => {
   switch (action.type) {
     case 'ADD_TO_CART':
       return {
-        ...state,
+        ...cart,
 		'restaurantId':action.payload.restaurantId,
         items: {
-          ...state.items,
+          ...cart.items,
           [action.payload._id]: { ...action.payload }
         }
       };
     case 'REMOVE_FROM_CART':
-      const { [action.payload._id]: _, ...newItems } = state.items;
+      const { [action.payload._id]: _, ...newItems } = cart.items;
       return {
-        ...state,
+        ...cart,
         items: newItems
       };
     case 'CLEAR_CART':
       return { restaurantId: null, items: {} };
     default:
-      return state;
+      return cart;
   }
 };
 
 
 export const CartProvider = ({ children }) => {
-	  const [cart, dispatch] = useReducer(cartReducer, initialState , () => {
-		const localData = localStorage.getItem('cart');
-		return localData ? JSON.parse(localData) : {};
+
+	  const [cart, dispatch] = useReducer(cartReducer, initialState, ():CartState => {
+  		  const localData = localStorage.getItem('cart');
+  		  return localData ? JSON.parse(localData) : initialState;
 	  });
-	  
-	  useEffect(() => {
-		localStorage.setItem('cart', JSON.stringify(cart));
+
+    // store cart in localstorage everytime it is changed
+
+    useEffect(() => {
+		  localStorage.setItem('cart', JSON.stringify(cart));
 	  }, [cart]);
   
   return (
